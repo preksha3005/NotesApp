@@ -18,7 +18,7 @@ const Notes = () => {
   
   const navigate=useNavigate()
   React.useEffect(() => {
-    axios.get("http://localhost:3001/verify").then((result) => {
+    axios.get(`${process.env.backend_url}/verify`).then((result) => {
       if (result.data.status) {
         console.log(result.data.message);
       } else {
@@ -40,7 +40,7 @@ const Notes = () => {
 
   const fetchNotes = async () => {
     try {
-      const response = await axios.get("http://localhost:3001/get");
+      const response = await axios.get(`${process.env.backend_url}/get`);
       setn(response.data.notes);
     } catch (error) {
       console.error(error);
@@ -50,7 +50,7 @@ const Notes = () => {
   const handle = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:3001/add", {
+      await axios.post(`${process.env.backend_url}/add`, {
         title,
         content,
       });
@@ -63,7 +63,7 @@ const Notes = () => {
   };
   const del = (id) => {
     axios
-      .delete("http://localhost:3001/delete/" + id)
+      .delete(`${process.env.backend_url}/delete/` + id)
        .then((response) => { 
         console.log("Delete response:", response.data);
         fetchNotes();
@@ -80,7 +80,7 @@ const Notes = () => {
   const handleUpdate=async(e)=>{
     e.preventDefault()
     try{
-      const response=await axios.put(`http://localhost:3001/update/${editNoteId}`,{
+      const response=await axios.put(`${process.env.backend_url}/update/${editNoteId}`,{
         title: editTitle,
         content: editContent,
       });
