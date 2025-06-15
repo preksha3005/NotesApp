@@ -1,17 +1,34 @@
-const express = require("express");
-const mongoose = require("mongoose");
-const cors = require("cors");
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
-const app = express();
-import path from 'path';
-const dotenv = require("dotenv");
-dotenv.config();
-const cookieParser = require("cookie-parser");
-const nodemailer = require("nodemailer");
-const User = require("./models/User");
-const Notes = require("./models/Notes_model");
+// const express = require("express");
+// const mongoose = require("mongoose");
+// const cors = require("cors");
+// const bcrypt = require("bcrypt");
+// const jwt = require("jsonwebtoken");
+// const app = express();
+// import path from 'path';
+// const dotenv = require("dotenv");
+// dotenv.config();
+// const cookieParser = require("cookie-parser");
+// const nodemailer = require("nodemailer");
+// const User = require("./models/User");
+// const Notes = require("./models/Notes_model");
+import express from "express";
+import mongoose from "mongoose";
+import cors from "cors";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+import cookieParser from "cookie-parser";
+import nodemailer from "nodemailer";
+import path from "path";
+import { fileURLToPath } from "url";
+import User from "./models/User.js";
+import Notes from "./models/Notes_model.js";
 
+dotenv.config();
+
+const app = express();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 app.use(
   cors({
     origin: "http://localhost:3000",
@@ -19,7 +36,7 @@ app.use(
   })
 );
 
-const __dirname = path.resolve();
+// const __dirname = path.resolve();
 app.use(express.json());
 app.use(cookieParser()); // middleware function in Express.js that enables the parsing of cookies in incoming requests.
 // mongoose.connect("mongodb://localhost:27017/notes-new")
@@ -31,20 +48,21 @@ app.use(cookieParser()); // middleware function in Express.js that enables the p
 //     console.error("MongoDB connection error:", err);
 //   });
 
-mongoose.connect(process.env.MONGO_URI)
-    .then(() => {
-        console.log('MongoDB connected successfully!');
-    })
-    .catch(err => {
-        console.error('MongoDB connection error:', err);
-        // Exit process with failure code if database connection fails
-        process.exit(1);
-    });
+mongoose
+  .connect(process.env.MONGO_URI)
+  .then(() => {
+    console.log("MongoDB connected successfully!");
+  })
+  .catch((err) => {
+    console.error("MongoDB connection error:", err);
+    // Exit process with failure code if database connection fails
+    process.exit(1);
+  });
 
-if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname, '../client/build')));
-  app.get('*', (req, res) =>
-    res.sendFile(path.resolve(__dirname, '../client/build', 'index.html'))
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "../client/build")));
+  app.get("*", (req, res) =>
+    res.sendFile(path.resolve(__dirname, "../client/build", "index.html"))
   );
 }
 
@@ -84,7 +102,7 @@ app.post("/loginapp", async (req, res) => {
 
 app.post("/forgotpass", async (req, res) => {
   const { email } = req.body;
-  const user = await User.findOne({ email:email });
+  const user = await User.findOne({ email: email });
   if (!user) return res.json({ message: "User not found" });
   else {
     const token = jwt.sign({ id: user._id, name: user.name }, process.env.KEY, {
@@ -147,7 +165,7 @@ app.post("/add", verifyuser, (req, res) => {
   const { title, content } = req.body;
   const userId = req.user.id;
   Notes.create({ title: title, content: content, user: userId })
-    .then((res) => res.json({ status: true, message: "Note stored" }))
+    .then((cnote) => res.json({ status: true, message: "Note stored", note:cnote}))
     .catch((err) => res.json({ message: "Error in storing note" }));
 });
 
@@ -163,17 +181,41 @@ app.get("/get", verifyuser, async (req, res) => {
   }
 });
 
-app.delete("/delete/:id", verifyuser, (req, res) => {
+app.delete("/delete/:id", verifyuser, async(req, res) => {
   const { id } = req.params;
   const userId = req.user.id;
-  Notes.findByIdAndDelete({ _id: id })
-    .then((result) => {
-      Notes.find({ user: userId })
-        .exec()
-        .then((data) => res.json(data))
-        .catch((err) => res.json(err));
-    })
-    .catch((err) => console.log(err));
+  try{
+    const deletednote=await Notes.findOneAndDelete({_id:id,user:userId})
+    if (!deletednote) {
+      return res.status(404).json({ message: "Note not found or unauthorized to delete." });
+    }
+     const remainingNotes = await Notes.find({ user: userId }).exec();
+    res.json(remainingNotes); 
+  }
+  catch(err)
+  {
+    console.error("Error: ",err)
+  }
+});
+
+app.put("/update/:id", verifyuser, async (req, res) => {
+  const { id } = req.params;
+  const { title, content } = req.body;
+  const userId = req.user.id;
+  try {
+    const updatedNote = await Notes.findOneAndUpdate(
+      { _id: id, user: userId },
+      { title, content },
+      { new: true }
+    );
+     if (!updatedNote) {
+      return res.status(404).json({ message: "Note not found or you don't have permission to edit it." });
+    }
+
+    return res.json({ status: true, message: "Note updated successfully",  updatedNote });
+  } catch (err) {
+    console.error("Error: ", err);
+  }
 });
 app.get("/logout", (req, res) => {
   res.clearCookie("token");
@@ -192,8 +234,5 @@ app.get("/initial", verifyuser, (req, res) => {
 app.listen(process.env.PORT, () => {
   console.log("Server is running");
 });
-
-
-
 
 //mongodb+srv://mern_user:<prek7171>@cluster0.uxy03en.mongodb.net/

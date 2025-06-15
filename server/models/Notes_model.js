@@ -1,4 +1,5 @@
-const mongoose = require("mongoose");
+// const mongoose = require("mongoose");
+import mongoose from 'mongoose';
 const NotesSchema = new mongoose.Schema({
   title: { type: String, required: true },
   content: { type: String, required: true },
@@ -7,5 +8,7 @@ const NotesSchema = new mongoose.Schema({
         ref: 'User'
       }
 });
-const Notes = mongoose.model("Notes", NotesSchema);
-module.exports = Notes;
+// const Notes = mongoose.model("Notes", NotesSchema);
+// module.exports = Notes;
+
+export default mongoose.model('Notes', NotesSchema);
