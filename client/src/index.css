@@ -1,0 +1,325 @@
+.archivo-black-regular {
+  font-family: "Archivo Black", sans-serif;
+  font-weight: 900;
+  font-style: normal;
+}
+body
+{
+  background-color: black;
+  color: white;
+}
+nav {
+  /* border-bottom: 1px solid white; */
+  display: flex;
+  overflow: auto; /* Add this property */
+  gap: 65vw;
+  box-sizing: border-box;
+  /* z-index: 8; */
+}
+.prof {
+  display: flex;
+  gap: 5vw;
+  z-index: 5;
+  position: relative;
+  left: -20px;
+  /* border-bottom: 1px solid white; */
+}
+.prof li {
+  list-style: none;
+  z-index: 5;
+}
+.prof li a {
+  color: white;
+  font-weight: 600;
+  z-index: 5;
+}
+.navbar
+{
+  color: white;
+  z-index: 5;
+  border-bottom: 1px solid white;
+  width: 100%;
+
+}
+.navbar li {
+  list-style: none;
+  font-size: 22px;
+  z-index: 5;
+}
+.nav-login
+{
+  border-bottom: 1px solid white;
+  z-index: 10;
+}
+.logout {
+  font-size: 18px;
+  cursor: pointer;
+  z-index: 5;
+}
+.box {
+  display: flex;
+  flex-direction: column;
+  border: 1.5px solid #ccc;
+  width: 40%;
+  margin: auto;
+  justify-content: center;
+  align-items: center;
+  padding: 2.5%;
+  position: relative;
+  top: 5.5vw;
+  background: transparent;
+  font-size: 20px;
+  z-index: 2;
+}
+.name,
+.email,
+.password {
+  width: 15vw;
+  height: 3.5vh;
+  text-align: center;
+  border: none;
+  outline: none;
+  border-bottom: 2px solid white;
+  background: transparent;
+  color: white;
+}
+.reg {
+  background-color: #1270be; /* Blue color for the button */
+  color: #ffffff;
+  border: none;
+  outline: none;
+  width: 16vw;
+  height: 4vh;
+  text-align: center;
+  /* background: transparent; */
+  /* padding: 1vw; */
+  cursor: pointer;
+  font-size: 16px;
+}
+.box-add {
+  display: flex;
+  flex-direction: column;
+  border: 1.5px solid #ccc;
+  width: 40%;
+  margin: auto;
+  justify-content: center;
+  align-items: center;
+  padding: 2.5%;
+  position: relative;
+  top: 4vw;
+  background: transparent;
+  font-size: 20px;
+  z-index: 2;
+  box-shadow: 4px 4px 10px white;
+}
+.login
+{
+  color: #89CFF0;
+}
+.title {
+  width: 36vw;
+  height: 3.8vh;
+  text-align: center;
+  font-size: 16px;
+  border: none;
+  outline: none;
+  border-bottom: 1px solid white;
+  background: transparent;
+  color: white;
+}
+.content {
+  text-align: center;
+  font-size: 18px;
+  background: transparent;
+  color: white;
+  border: 1px solid white;
+}
+.add-btn {
+  background-color: #1270be; /* Blue color for the button */
+  color: #ffffff;
+  border: none;
+  outline: none;
+  width: 37vw;
+  height: 4.5vh;
+  font-size: 18px;
+  text-align: center;
+  /* padding: 1vw; */
+  cursor: pointer;
+}
+.notes-sec
+{
+  z-index: 2;
+}
+.notes-sec h2 {
+  text-align: center;
+  z-index: 2;
+}
+.note-actions{
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+}
+.edit{
+  font-size: 23px;
+  cursor: pointer;
+}
+h4 {
+  position: relative;
+  left: 145%;
+}
+.notes-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  z-index: 2;
+}
+.card {
+  border: 1px solid white;
+  width: 28vw;
+  text-align: center;
+  padding: 10px;
+  word-break: break-all;
+  position: relative;
+  left: 12px;
+  z-index: 2;
+  height: 50vh; /* set a fixed height for each card */
+  overflow-y: auto;
+  box-shadow: 2px 2px 8px white;
+}
+.del {
+  cursor: pointer;
+  font-size: 20px;
+}
+.title-note {
+  border-bottom: 1px solid white;
+  color: #89CFF0;
+  position: sticky;
+}
+.bg
+{
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+}
+
+.edit {
+    cursor: pointer;
+    font-size: 1.4em;
+}
+
+/* Edit Form inside Card */
+.edit-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 90%;
+    /* justify-content: center; */
+    margin-left:2vw;
+}
+
+.edit-form input,
+.edit-form textarea {
+    padding: 8px;
+    border: 1px solid #444444;
+    border-radius: 4px;
+    background-color: #1a1a1a;
+    color: #e0e0e0;
+    font-size: 0.95em;
+    width: calc(100% - 11px); /* Account for padding/border */
+    box-sizing: border-box;
+}
+
+.edit-form button {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9em;
+    margin-right: 8px;
+}
+
+.edit-form button[type="submit"] {
+    
+    color: white;
+    background: transparent;
+    border: 1px solid #ccc;
+}
+.edit-form button[type="submit"]:hover{
+background-color: #28a745; /* Green save button */
+}
+.edit-form button[type="button"] { /* Cancel button */
+    color: white;
+     background: transparent;
+    border: 1px solid #ccc;
+}
+.edit-form button[type="button"]:hover{
+   background-color: #dc3545; /* Red cancel button */
+}
+
+
+@media only screen and (max-width: 600px) {
+  .box {
+    width: 80%;
+    top: 30vw;
+  }
+  .reg {
+    position: relative;
+    left: 8.5vw;
+    width: 18vw;
+    padding: 1.5%;
+    font-size: 15px;
+  }
+  .name,
+  .email,
+  .password {
+    width: 35vw;
+    height: 3.5vh;
+    text-align: center;
+    font-size: 16px;
+  }
+  .form2 {
+    position: relative;
+    left: -1vw;
+  }
+
+  .prof {
+    display: flex;
+    gap: 5vw;
+    z-index: 5;
+    position: relative;
+    left: -135px;
+    /* border-bottom: 1px solid white; */
+  }
+
+  .box-add {
+    width: 85%;
+    left: 2px;
+  }
+  .title {
+    width: 69vw;
+    height: 3.8vh;
+    font-size: 20px;
+  }
+  .content {
+    font-size: 20px;
+    width: 69vw;
+  }
+  .add-btn {
+    width: 70vw;
+    font-size: 20px;
+    position: relative;
+    top: -10px;
+  }
+  .notes-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    z-index: 2;
+  }
+  .card {
+    width: 40vw;
+    left: 1px;
+    height: 30vh; 
+    overflow-y: auto;
+  }
+}
