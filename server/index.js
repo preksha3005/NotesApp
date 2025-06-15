@@ -100,7 +100,14 @@ app.post("/loginapp", async (req, res) => {
           expiresIn: "1h",
         }
       );
-      res.cookie("token", token, { httpOnly: true, maxAge: 360000 });
+      // res.cookie("token", token, { httpOnly: true, maxAge: 360000 });
+      res.cookie("token", token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production", // Only set secure: true in production (HTTPS)
+        sameSite: process.env.NODE_ENV === "production" ? 'None' : 'Lax', // 'None' for cross-site, 'Lax' for development
+        maxAge: 3600000, // Match token expiration: 1 hour in milliseconds
+        // domain: '.onrender.com' // Optional: If both frontend/backend are on subdomains of .onrender.com, this can help
+      });
       return res.json({ status: true, message: "Login successful" });
     }
   }
