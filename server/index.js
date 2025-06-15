@@ -65,13 +65,6 @@ mongoose
     process.exit(1);
   });
 
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "../client/build")));
-  app.get("*", (req, res) =>
-    res.sendFile(path.resolve(__dirname, "../client/build", "index.html"))
-  );
-}
-
 app.post("/sign", async (req, res) => {
   const { name, email, password } = req.body;
   const user = await User.findOne({ email });
@@ -243,6 +236,13 @@ app.get("/initial", verifyuser, (req, res) => {
     res.json({ message: "Error" });
   }
 });
+
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "../client/build")));
+  app.get("*", (req, res) =>
+    res.sendFile(path.resolve(__dirname, "../client/build", "index.html"))
+  );
+}
 
 app.listen(process.env.PORT, () => {
   console.log("Server is running");
