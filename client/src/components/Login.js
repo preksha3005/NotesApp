@@ -23,7 +23,7 @@ const Login = () => {
   const handle = (e) => {
     e.preventDefault();
     axios
-      .post("http://localhost:3001/loginapp", { email, password })
+      .post(`${process.env.backend_url}/loginapp`, { email, password })
       .then((result) => {
         if (result.data.message) {
           console.log(result.data.message);

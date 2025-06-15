@@ -8,7 +8,7 @@ const ForgotPass = () => {
   const handle = (e) => {
     e.preventDefault();
     axios
-      .post("http://localhost:3001/forgotpass", { email })
+      .post(`${process.env.backend_url}/forgotpass`, { email })
       .then((result) => {
         if (result.data.status) {
           alert("Check your mail")

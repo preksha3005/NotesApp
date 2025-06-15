@@ -6,13 +6,13 @@ const Navbar_login = () => {
   const navigate = useNavigate();
   React.useEffect(() => {
     axios
-      .get("http://localhost:3001/initial")
+      .get(`${process.env.backend_url}/initial`)
       .then((res) => seti(res.data.initial))
       .catch((err) => console.log("Error"));
   }, []);
   const handlelog = () => {
     axios
-      .get("http://localhost:3001/logout")
+      .get(`${process.env.backend_url}/logout`)
       .then((res) => {
         if (res.data.status) {
           navigate("/login");

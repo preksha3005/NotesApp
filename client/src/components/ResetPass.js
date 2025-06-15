@@ -9,7 +9,7 @@ const ResetPass = () => {
   const handle = (e) => {
     e.preventDefault();
     axios
-      .post("http://localhost:3001/resetpass/"+token, { password })
+      .post(`${process.env.backend_url}/resetpass/`+token, { password })
       .then((result) => {
         if (result.data.status) navigate("/login");
       })

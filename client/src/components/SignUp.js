@@ -23,7 +23,7 @@ const SignUp = () => {
   const handle=(e)=>{
     e.preventDefault();
     axios
-      .post("http://localhost:3001/sign", { name, email, password })
+      .post(`${process.env.backend_url}/sign`, { name, email, password })
       .then((result) => {
         if (result.data.message) {
           console.log(result.data.message);
