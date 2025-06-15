@@ -4,15 +4,18 @@ import axios from "axios";
 const Navbar_login = () => {
   const [initial, seti] = React.useState("");
   const navigate = useNavigate();
+
+  axios.defaults.baseURL = process.env.REACT_APP_BACKEND_URL;
+
   React.useEffect(() => {
     axios
-      .get(`${process.env.backend_url}/initial`)
+      .get(`/initial`)
       .then((res) => seti(res.data.initial))
       .catch((err) => console.log("Error"));
   }, []);
   const handlelog = () => {
     axios
-      .get(`${process.env.backend_url}/logout`)
+      .get(`/logout`)
       .then((res) => {
         if (res.data.status) {
           navigate("/login");

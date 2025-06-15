@@ -5,10 +5,13 @@ import { useNavigate } from "react-router-dom";
 const ForgotPass = () => {
   const [email, sete] = React.useState("");
   const navigate = useNavigate();
+
+  axios.defaults.baseURL = process.env.REACT_APP_BACKEND_URL;
+
   const handle = (e) => {
     e.preventDefault();
     axios
-      .post(`${process.env.backend_url}/forgotpass`, { email })
+      .post(`/forgotpass`, { email })
       .then((result) => {
         if (result.data.status) {
           alert("Check your mail")

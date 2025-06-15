@@ -16,9 +16,10 @@ const Notes = () => {
   const [editTitle, setEditTitle] = React.useState(""); 
   const [editContent, setEditContent] = React.useState("");
   
+  axios.defaults.baseURL = process.env.REACT_APP_BACKEND_URL;
   const navigate=useNavigate()
   React.useEffect(() => {
-    axios.get(`${process.env.backend_url}/verify`).then((result) => {
+    axios.get(`/verify`).then((result) => {
       if (result.data.status) {
         console.log(result.data.message);
       } else {
@@ -40,7 +41,7 @@ const Notes = () => {
 
   const fetchNotes = async () => {
     try {
-      const response = await axios.get(`${process.env.backend_url}/get`);
+      const response = await axios.get(`/get`);
       setn(response.data.notes);
     } catch (error) {
       console.error(error);
@@ -50,7 +51,7 @@ const Notes = () => {
   const handle = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(`${process.env.backend_url}/add`, {
+      await axios.post(`/add`, {
         title,
         content,
       });
@@ -63,7 +64,7 @@ const Notes = () => {
   };
   const del = (id) => {
     axios
-      .delete(`${process.env.backend_url}/delete/` + id)
+      .delete(`/delete/` + id)
        .then((response) => { 
         console.log("Delete response:", response.data);
         fetchNotes();
@@ -80,7 +81,7 @@ const Notes = () => {
   const handleUpdate=async(e)=>{
     e.preventDefault()
     try{
-      const response=await axios.put(`${process.env.backend_url}/update/${editNoteId}`,{
+      const response=await axios.put(`/update/${editNoteId}`,{
         title: editTitle,
         content: editContent,
       });

@@ -13,6 +13,8 @@ const SignUp = () => {
   const navigate=useNavigate()
   const [particlesVisible, setParticlesVisible] = React.useState(false);
 
+  axios.defaults.baseURL = process.env.REACT_APP_BACKEND_URL;
+
   React.useEffect(() => {
     initParticlesEngine(async (engine) => {
       await loadFull(engine);
@@ -23,7 +25,7 @@ const SignUp = () => {
   const handle=(e)=>{
     e.preventDefault();
     axios
-      .post(`${process.env.backend_url}/sign`, { name, email, password })
+      .post(`/sign`, { name, email, password })
       .then((result) => {
         if (result.data.message) {
           console.log(result.data.message);

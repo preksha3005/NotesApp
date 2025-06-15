@@ -19,11 +19,13 @@ const Login = () => {
     });
   }, []);
 
+  axios.defaults.baseURL = process.env.REACT_APP_BACKEND_URL;
+
   const navigate = useNavigate();
   const handle = (e) => {
     e.preventDefault();
     axios
-      .post(`${process.env.backend_url}/loginapp`, { email, password })
+      .post(`/loginapp`, { email, password })
       .then((result) => {
         if (result.data.message) {
           console.log(result.data.message);
