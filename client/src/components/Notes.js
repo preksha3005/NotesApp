@@ -12,12 +12,12 @@ const Notes = () => {
   const [content, setc] = React.useState("");
   const [notes, setn] = React.useState([]);
   const [particlesVisible, setParticlesVisible] = React.useState(false);
-  const [editNoteId, setEditNoteId] = React.useState(null); 
-  const [editTitle, setEditTitle] = React.useState(""); 
+  const [editNoteId, setEditNoteId] = React.useState(null);
+  const [editTitle, setEditTitle] = React.useState("");
   const [editContent, setEditContent] = React.useState("");
-  
+
   axios.defaults.baseURL = process.env.REACT_APP_BACKEND_URL;
-  const navigate=useNavigate()
+  const navigate = useNavigate();
   React.useEffect(() => {
     axios.get(`/verify`).then((result) => {
       if (result.data.status) {
@@ -42,7 +42,15 @@ const Notes = () => {
   const fetchNotes = async () => {
     try {
       const response = await axios.get(`/get`);
-      setn(response.data.notes);
+      if (response.data && Array.isArray(response.data.notes)) {
+        setn(response.data.notes);
+      } else {
+        console.warn(
+          "Backend /get endpoint did not return a 'notes' array:",
+          response.data
+        );
+        setn([]);
+      }
     } catch (error) {
       console.error(error);
     }
@@ -65,43 +73,41 @@ const Notes = () => {
   const del = (id) => {
     axios
       .delete(`/delete/` + id)
-       .then((response) => { 
+      .then((response) => {
         console.log("Delete response:", response.data);
         fetchNotes();
       })
       .catch((err) => console.log(err));
   };
 
-  const handleEdit=(note)=>{
-    setEditNoteId(note._id)
-    setEditTitle(note.title)
-    setEditContent(note.content)
-  }
-  
-  const handleUpdate=async(e)=>{
-    e.preventDefault()
-    try{
-      const response=await axios.put(`/update/${editNoteId}`,{
+  const handleEdit = (note) => {
+    setEditNoteId(note._id);
+    setEditTitle(note.title);
+    setEditContent(note.content);
+  };
+
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.put(`/update/${editNoteId}`, {
         title: editTitle,
         content: editContent,
       });
-      console.log(response.data.updatedNote)
-      const updatedNode=response.data.updatedNote
-      setn((prev)=>
-        prev.map((note)=>
-        note._id==updatedNode._id?updatedNode:note
-    ))
+      console.log(response.data.updatedNote);
+      const updatedNode = response.data.updatedNote;
+      setn((prev) =>
+        prev.map((note) => (note._id == updatedNode._id ? updatedNode : note))
+      );
       // await fetchNotes()
-      setEditNoteId(null)
-      setEditTitle("")
-      setEditContent("")
+      setEditNoteId(null);
+      setEditTitle("");
+      setEditContent("");
+    } catch (error) {
+      console.error("Error updating the note ", error);
     }
-    catch(error){
-      console.error("Error updating the note ", error)
-    }
-  }
+  };
 
-   const handleCancelEdit = () => {
+  const handleCancelEdit = () => {
     setEditNoteId(null);
     setEditTitle("");
     setEditContent("");
@@ -153,7 +159,7 @@ const Notes = () => {
           ) : (
             notes.map((note) => {
               return (
-                <div key={note._id} className="card"> 
+                <div key={note._id} className="card">
                   {editNoteId === note._id ? ( // If this note is being edited
                     <form onSubmit={handleUpdate} className="edit-form">
                       <input
@@ -178,10 +184,14 @@ const Notes = () => {
                     <>
                       <h3 className="title-note">{note.title}</h3>
                       <div className="note-actions">
-                        <div className="del" onClick={() => del(note._id)}> {/* Use note._id for delete */}
+                        <div className="del" onClick={() => del(note._id)}>
+                          {" "}
+                          {/* Use note._id for delete */}
                           <FaTrashAlt />
                         </div>
-                        <div className="edit" onClick={() => handleEdit(note)}> {/* Pass the entire note object */}
+                        <div className="edit" onClick={() => handleEdit(note)}>
+                          {" "}
+                          {/* Pass the entire note object */}
                           <FaEdit />
                         </div>
                       </div>
